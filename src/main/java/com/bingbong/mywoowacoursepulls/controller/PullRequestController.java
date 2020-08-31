@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class PullRequestController {
 
     @GetMapping
-    public ResponseEntity<List<PullRequestResponse>> findAllPullRequests(
+    public ResponseEntity<List<PullRequestResponse>> findPullRequests(
         @RequestBody String nickname) {
         List<PullRequestResponse> pullRequestResponses = Arrays.asList(
             PullRequestResponse.of(1L, "빙봉", "woowacourse", "open", "url"),

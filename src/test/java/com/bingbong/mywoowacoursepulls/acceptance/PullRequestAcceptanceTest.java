@@ -19,7 +19,8 @@ import org.springframework.http.MediaType;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PullRequestAcceptanceTest {
 
-    private static final String TEST_NICKNAME = "빙봉";
+    public static final String TEST_NICKNAME = "빙봉";
+
     @LocalServerPort
     private int port;
 
@@ -48,13 +49,13 @@ public class PullRequestAcceptanceTest {
      */
     @DisplayName("닉네임 키워드 조회")
     @Test
-    void findPullRequestsByNickname() {
-        List<PullRequestResponse> pullRequestResponses = findPullRequests();
+    void findPullRequests() {
+        List<PullRequestResponse> pullRequestResponses = findPullRequestsByNickname();
 
         assertThat(pullRequestResponses).hasSize(3);
     }
 
-    private List<PullRequestResponse> findPullRequests() {
+    private List<PullRequestResponse> findPullRequestsByNickname() {
         HashMap<String, String> params = new HashMap<>();
         params.put("nickname", TEST_NICKNAME);
 
