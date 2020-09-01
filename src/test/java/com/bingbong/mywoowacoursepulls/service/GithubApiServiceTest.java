@@ -1,5 +1,16 @@
 package com.bingbong.mywoowacoursepulls.service;
 
+import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.EXPECT_GITHUB_PULL_REQUEST_RESPONSES;
+import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.GITHUB_REPOSITORY_RESPONSES;
+import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.REAL_PULL_REQUEST_URL;
+import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.REAL_REPOSITORY_URL;
+import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.TEST_ORG_NAME;
+import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.TEST_PULL_REQUEST_DEFAULT_STATE;
+import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.TEST_PULL_REQUEST_STATE;
+import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.TEST_PULL_REQUEST_TITLE;
+import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.TEST_PULL_REQUEST_URL;
+import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.TEST_REPO_NAME;
+import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.TEST_REPO_URL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
@@ -9,7 +20,6 @@ import com.bingbong.mywoowacoursepulls.dto.GithubPullRequestResponse;
 import com.bingbong.mywoowacoursepulls.dto.GithubRepositoryResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,19 +32,6 @@ import org.springframework.test.web.client.MockRestServiceServer;
 
 @RestClientTest(GithubApiService.class)
 public class GithubApiServiceTest {
-
-    public static final String TEST_REPO_NAME = "woowa-writing-2";
-    public static final String TEST_REPO_URL = "https://github.com/woowacourse/woowa-writing-2";
-    public static final String TEST_ORG_NAME = "woowacourse";
-    public static final String TEST_PULL_REQUEST_TITLE = "[빙봉] 레벨 3 - 회고 글쓰기 미션 제출합니다.";
-    public static final String TEST_PULL_REQUEST_URL = "https://github.com/woowacourse/woowa-writing-2";
-    public static final String TEST_PULL_REQUEST_DEFAULT_STATE = "all";
-    public static final String TEST_PULL_REQUEST_STATE = "open";
-    public static final String TEST_PULL_REQUEST_CREATED_AT = "2020-09-01T00:00:00Z";
-    public static final String TEST_PULL_REQUEST_UPDATED_AT = "2020-09-01T00:00:00Z";
-
-    private final String MOCK_REPOSITORY_URL = "https://api.github.com/orgs/woowacourse/repos";
-    private final String MOCK_PULL_REQUEST_URL = "https://api.github.com/repos/woowacourse/woowa-writing-2/pulls?state=all";
 
     private ObjectMapper mapper = new ObjectMapper();
 
@@ -49,15 +46,11 @@ public class GithubApiServiceTest {
     @Test
     void getAllRepositories_SuccessToGet() throws JsonProcessingException {
         // given
-        List<GithubRepositoryResponse> githubRepositoryRespons = Arrays.asList(
-            GithubRepositoryResponse.of(1L, TEST_REPO_NAME, TEST_REPO_URL),
-            GithubRepositoryResponse.of(2L, TEST_REPO_NAME, TEST_REPO_URL)
-        );
-        mockRestServiceServer.expect(requestTo(MOCK_REPOSITORY_URL))
+        mockRestServiceServer.expect(requestTo(REAL_REPOSITORY_URL))
             .andExpect(method(HttpMethod.GET))
             .andRespond(withStatus(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(mapper.writeValueAsString(githubRepositoryRespons))
+                .body(mapper.writeValueAsString(GITHUB_REPOSITORY_RESPONSES))
             );
 
         // when
@@ -80,18 +73,11 @@ public class GithubApiServiceTest {
     @Test
     void getAllPullRequests_SuccessToGet() throws JsonProcessingException {
         // given
-        List<ExpectGithubPullRequestResponse> expectGithubPullRequestResponses = Arrays.asList(
-            new ExpectGithubPullRequestResponse(1L, TEST_PULL_REQUEST_TITLE, TEST_PULL_REQUEST_URL,
-                TEST_PULL_REQUEST_STATE,
-                TEST_PULL_REQUEST_CREATED_AT, TEST_PULL_REQUEST_UPDATED_AT),
-            new ExpectGithubPullRequestResponse(2L, TEST_PULL_REQUEST_TITLE, TEST_PULL_REQUEST_URL,
-                TEST_PULL_REQUEST_STATE,
-                TEST_PULL_REQUEST_CREATED_AT, TEST_PULL_REQUEST_UPDATED_AT));
-        mockRestServiceServer.expect(requestTo(MOCK_PULL_REQUEST_URL))
+        mockRestServiceServer.expect(requestTo(REAL_PULL_REQUEST_URL))
             .andExpect(method(HttpMethod.GET))
             .andRespond(withStatus(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(mapper.writeValueAsString(expectGithubPullRequestResponses))
+                .body(mapper.writeValueAsString(EXPECT_GITHUB_PULL_REQUEST_RESPONSES))
             );
 
         // when
@@ -111,52 +97,4 @@ public class GithubApiServiceTest {
         assertThat(response.getCreatedAt()).isNotNull();
         assertThat(response.getUpdatedAt()).isNotNull();
     }
-
-    static class ExpectGithubPullRequestResponse {
-
-        private Long id;
-        private String title;
-        private String html_url;
-        private String state;
-        private String created_at;
-        private String updated_at;
-
-        ExpectGithubPullRequestResponse() {
-        }
-
-        public ExpectGithubPullRequestResponse(Long id, String title, String html_url,
-            String state, String created_at, String updated_at) {
-            this.id = id;
-            this.title = title;
-            this.html_url = html_url;
-            this.state = state;
-            this.created_at = created_at;
-            this.updated_at = updated_at;
-        }
-
-        public Long getId() {
-            return id;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public String getHtml_url() {
-            return html_url;
-        }
-
-        public String getState() {
-            return state;
-        }
-
-        public String getCreated_at() {
-            return created_at;
-        }
-
-        public String getUpdated_at() {
-            return updated_at;
-        }
-    }
-
 }

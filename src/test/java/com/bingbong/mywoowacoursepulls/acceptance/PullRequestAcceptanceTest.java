@@ -1,6 +1,7 @@
 package com.bingbong.mywoowacoursepulls.acceptance;
 
 
+import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.TEST_NICKNAME;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.bingbong.mywoowacoursepulls.dto.PullRequestResponse;
@@ -18,8 +19,6 @@ import org.springframework.http.MediaType;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PullRequestAcceptanceTest {
-
-    public static final String TEST_NICKNAME = "빙봉";
 
     @LocalServerPort
     private int port;
@@ -71,6 +70,4 @@ public class PullRequestAcceptanceTest {
             .jsonPath()
             .getList(".", PullRequestResponse.class);
     }
-
-
 }
