@@ -22,12 +22,12 @@ import org.springframework.test.web.client.MockRestServiceServer;
 @RestClientTest(GithubApiService.class)
 public class GithubApiServiceTest {
 
-    private final String REPOSITORY_URL = "https://api.github.com/orgs/woowacourse/repos?per_page=100";
+    private final String MOCK_REPOSITORY_URL = "https://api.github.com/orgs/woowacourse/repos";
+
     @Autowired
     private GithubApiService githubApiService;
     @Autowired
     private MockRestServiceServer mockRestServiceServer;
-    private ObjectMapper mapper = new ObjectMapper();
 
 
     @DisplayName("orgName에 해당하는 모든 Repository 조회")
@@ -39,7 +39,8 @@ public class GithubApiServiceTest {
                 .of(1L, "nextstep_test", "https://github.com/woowacourse/nextstep_test"),
             RepositoryResponse.of(2L, "javable", "https://github.com/woowacourse/javable")
         );
-        mockRestServiceServer.expect(requestTo(REPOSITORY_URL))
+        ObjectMapper mapper = new ObjectMapper();
+        mockRestServiceServer.expect(requestTo(MOCK_REPOSITORY_URL))
             .andExpect(method(HttpMethod.GET))
             .andRespond(withStatus(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)

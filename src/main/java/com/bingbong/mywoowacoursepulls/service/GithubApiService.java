@@ -1,5 +1,7 @@
 package com.bingbong.mywoowacoursepulls.service;
 
+import static com.bingbong.mywoowacoursepulls.utils.UriUtils.getGithubRepositoryUri;
+
 import com.bingbong.mywoowacoursepulls.dto.RepositoryResponse;
 import java.time.Duration;
 import java.util.List;
@@ -17,10 +19,8 @@ import org.springframework.web.client.RestTemplate;
 public class GithubApiService {
 
     private final RestTemplate restTemplate;
-    private final String REPOSITORY_URL = "https://api.github.com/orgs/woowacourse/repos?per_page=100";
 
     public GithubApiService(RestTemplateBuilder restTemplateBuilder) {
-        // TODO: 2020/09/01 rootUri 설정
         this.restTemplate = restTemplateBuilder
             .setConnectTimeout(Duration.ofMillis(5000))
             .setReadTimeout(Duration.ofMillis(5000))
@@ -33,7 +33,7 @@ public class GithubApiService {
         httpHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         HttpEntity<?> httpEntity = new HttpEntity<>(new HttpHeaders());
 
-        return restTemplate.exchange(REPOSITORY_URL, HttpMethod.GET, httpEntity,
+        return restTemplate.exchange(getGithubRepositoryUri(orgName), HttpMethod.GET, httpEntity,
             new ParameterizedTypeReference<List<RepositoryResponse>>() {
             });
     }
