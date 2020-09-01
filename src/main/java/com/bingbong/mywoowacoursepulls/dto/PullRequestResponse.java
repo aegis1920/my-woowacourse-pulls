@@ -6,15 +6,15 @@ public class PullRequestResponse {
     private String nickname;
     private String repoName;
     private String state;
-    private String htmlLink;
+    private String htmlUrl;
 
     public PullRequestResponse(Long id, String nickname, String repoName, String state,
-        String htmlLink) {
+        String htmlUrl) {
         this.id = id;
         this.nickname = nickname;
         this.repoName = repoName;
         this.state = state;
-        this.htmlLink = htmlLink;
+        this.htmlUrl = htmlUrl;
     }
 
     public static PullRequestResponse of(Long id, String nickname, String repoName, String state,
@@ -38,8 +38,8 @@ public class PullRequestResponse {
         return state;
     }
 
-    public String getHtmlLink() {
-        return htmlLink;
+    public String getHtmlUrl() {
+        return htmlUrl;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class PullRequestResponse {
             ", nickname='" + nickname + '\'' +
             ", repoName='" + repoName + '\'' +
             ", state='" + state + '\'' +
-            ", htmlLink='" + htmlLink + '\'' +
+            ", htmlLink='" + htmlUrl + '\'' +
             '}';
     }
 }
