@@ -1,19 +1,23 @@
 package com.bingbong.mywoowacoursepulls.dto;
 
-public class RepositoryResponse {
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class GithubRepositoryResponse {
 
     private Long id;
     private String name;
+
+    @JsonProperty("html_url")
     private String htmlUrl;
 
-    public RepositoryResponse(Long id, String name, String htmlUrl) {
+    public GithubRepositoryResponse(Long id, String name, String htmlUrl) {
         this.id = id;
         this.name = name;
         this.htmlUrl = htmlUrl;
     }
 
-    public static RepositoryResponse of(Long id, String name, String htmlLink) {
-        return new RepositoryResponse(id, name, htmlLink);
+    public static GithubRepositoryResponse of(Long id, String name, String htmlUrl) {
+        return new GithubRepositoryResponse(id, name, htmlUrl);
     }
 
     public Long getId() {
