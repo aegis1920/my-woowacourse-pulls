@@ -20,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class GithubApiService {
 
+    public static final String OAUTH_TOKEN = "token MOCK";
     private final RestTemplate restTemplate;
 
     public GithubApiService(RestTemplateBuilder restTemplateBuilder) {
@@ -29,28 +30,33 @@ public class GithubApiService {
             .build();
     }
 
-    public ResponseEntity<List<GithubRepositoryResponse>> getAllRepositories(String orgName) {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
-        httpHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        HttpEntity<?> httpEntity = new HttpEntity<>(new HttpHeaders());
+    public List<GithubRepositoryResponse> getAllRepositories(String orgName) {
+        HttpEntity<String> httpEntity = getHttpEntity();
 
-        return restTemplate.exchange(getGithubRepositoryUri(orgName), HttpMethod.GET, httpEntity,
-            new ParameterizedTypeReference<List<GithubRepositoryResponse>>() {
-            });
+        ResponseEntity<List<GithubRepositoryResponse>> responseEntity = restTemplate
+            .exchange(getGithubRepositoryUri(orgName), HttpMethod.GET, httpEntity,
+                new ParameterizedTypeReference<List<GithubRepositoryResponse>>() {
+                });
+
+        return responseEntity.getBody();
     }
 
-    public ResponseEntity<List<GithubPullRequestResponse>> getAllPullRequests(String repoName,
-        String state) {
+    public List<GithubPullRequestResponse> getAllPullRequests(String repoName, String state) {
+        HttpEntity<String> httpEntity = getHttpEntity();
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
-        httpHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        HttpEntity<?> httpEntity = new HttpEntity<>(new HttpHeaders());
-
-        return restTemplate
+        ResponseEntity<List<GithubPullRequestResponse>> responseEntity = restTemplate
             .exchange(getGithubPullRequestUri(repoName, state), HttpMethod.GET, httpEntity,
                 new ParameterizedTypeReference<List<GithubPullRequestResponse>>() {
                 });
+
+        return responseEntity.getBody();
+    }
+
+    private HttpEntity<String> getHttpEntity() {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+        httpHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        httpHeaders.set(HttpHeaders.AUTHORIZATION, OAUTH_TOKEN);
+        return new HttpEntity<>(httpHeaders);
     }
 }

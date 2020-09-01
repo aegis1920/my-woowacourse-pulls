@@ -40,6 +40,7 @@ public class GithubApiServiceTest {
 
     @Autowired
     private GithubApiService githubApiService;
+
     @Autowired
     private MockRestServiceServer mockRestServiceServer;
 
@@ -61,7 +62,7 @@ public class GithubApiServiceTest {
 
         // when
         List<GithubRepositoryResponse> expectGithubRepositoryResponses = githubApiService
-            .getAllRepositories(TEST_ORG_NAME).getBody();
+            .getAllRepositories(TEST_ORG_NAME);
 
         // then
         assertThat(expectGithubRepositoryResponses).isNotNull();
@@ -95,7 +96,7 @@ public class GithubApiServiceTest {
 
         // when
         List<GithubPullRequestResponse> responses = githubApiService
-            .getAllPullRequests(TEST_REPO_NAME, TEST_PULL_REQUEST_DEFAULT_STATE).getBody();
+            .getAllPullRequests(TEST_REPO_NAME, TEST_PULL_REQUEST_DEFAULT_STATE);
 
         // then
         assertThat(responses).isNotNull();

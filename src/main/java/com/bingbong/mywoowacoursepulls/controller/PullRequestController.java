@@ -18,9 +18,9 @@ public class PullRequestController {
     public ResponseEntity<List<PullRequestResponse>> findPullRequests(
         @RequestBody String nickname) {
         List<PullRequestResponse> pullRequestResponses = Arrays.asList(
-            PullRequestResponse.of(1L, "빙봉", "woowacourse", "open", "url"),
-            PullRequestResponse.of(2L, "빙봉", "woowacourse", "open", "url"),
-            PullRequestResponse.of(3L, "빙봉", "woowacourse", "open", "url")
+            new PullRequestResponse(),
+            new PullRequestResponse(),
+            new PullRequestResponse()
         );
 
         return ResponseEntity.status(HttpStatus.OK)

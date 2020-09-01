@@ -1,37 +1,41 @@
 package com.bingbong.mywoowacoursepulls.dto;
 
+import java.time.ZonedDateTime;
+
 public class PullRequestResponse {
 
     private Long id;
-    private String nickname;
-    private String repoName;
+    private String title;
     private String state;
     private String htmlUrl;
+    private ZonedDateTime pullRequestCreatedAt;
+    private ZonedDateTime pullRequestUpdatedAt;
 
-    public PullRequestResponse(Long id, String nickname, String repoName, String state,
-        String htmlUrl) {
-        this.id = id;
-        this.nickname = nickname;
-        this.repoName = repoName;
-        this.state = state;
-        this.htmlUrl = htmlUrl;
+    public PullRequestResponse() {
     }
 
-    public static PullRequestResponse of(Long id, String nickname, String repoName, String state,
-        String htmlLink) {
-        return new PullRequestResponse(id, nickname, repoName, state, htmlLink);
+    public PullRequestResponse(Long id, String title, String state, String htmlUrl,
+        ZonedDateTime pullRequestCreatedAt, ZonedDateTime pullRequestUpdatedAt) {
+        this.id = id;
+        this.title = title;
+        this.state = state;
+        this.htmlUrl = htmlUrl;
+        this.pullRequestCreatedAt = pullRequestCreatedAt;
+        this.pullRequestUpdatedAt = pullRequestUpdatedAt;
+    }
+
+    public static PullRequestResponse of(Long id, String title, String state, String htmlUrl,
+        ZonedDateTime pullRequestCreatedAt, ZonedDateTime pullRequestUpdatedAt) {
+        return new PullRequestResponse(id, title, state, htmlUrl, pullRequestCreatedAt,
+            pullRequestUpdatedAt);
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getNickname() {
-        return nickname;
-    }
-
-    public String getRepoName() {
-        return repoName;
+    public String getTitle() {
+        return title;
     }
 
     public String getState() {
@@ -42,14 +46,23 @@ public class PullRequestResponse {
         return htmlUrl;
     }
 
+    public ZonedDateTime getPullRequestCreatedAt() {
+        return pullRequestCreatedAt;
+    }
+
+    public ZonedDateTime getPullRequestUpdatedAt() {
+        return pullRequestUpdatedAt;
+    }
+
     @Override
     public String toString() {
         return "PullRequestResponse{" +
             "id=" + id +
-            ", nickname='" + nickname + '\'' +
-            ", repoName='" + repoName + '\'' +
+            ", title='" + title + '\'' +
             ", state='" + state + '\'' +
-            ", htmlLink='" + htmlUrl + '\'' +
+            ", htmlUrl='" + htmlUrl + '\'' +
+            ", pullRequestCreatedAt=" + pullRequestCreatedAt +
+            ", pullRequestUpdatedAt=" + pullRequestUpdatedAt +
             '}';
     }
 }
