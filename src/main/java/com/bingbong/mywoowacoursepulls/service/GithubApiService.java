@@ -7,7 +7,9 @@ import com.bingbong.mywoowacoursepulls.dto.GithubPullRequestResponse;
 import com.bingbong.mywoowacoursepulls.dto.GithubRepositoryResponse;
 import java.time.Duration;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,10 +20,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
+@PropertySource("classpath:config/application-prod.properties")
 public class GithubApiService {
 
-    public static final String OAUTH_TOKEN = "token MOCK";
     private final RestTemplate restTemplate;
+
+    @Value("${github.api.oauth-token}")
+    private String githubApiOauthToken;
 
     public GithubApiService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder
@@ -56,7 +61,7 @@ public class GithubApiService {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
         httpHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        httpHeaders.set(HttpHeaders.AUTHORIZATION, OAUTH_TOKEN);
+        httpHeaders.set(HttpHeaders.AUTHORIZATION, githubApiOauthToken);
         return new HttpEntity<>(httpHeaders);
     }
 }
