@@ -3,8 +3,9 @@ package com.bingbong.mywoowacoursepulls.service;
 import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.PULL_REQUEST_RESPONSES;
 import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.TEST_NICKNAME;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
 
+import com.bingbong.mywoowacoursepulls.dto.PullRequestRequest;
 import com.bingbong.mywoowacoursepulls.dto.PullRequestResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -23,11 +24,11 @@ public class PullRequestServiceTest {
     @DisplayName("닉네임 키워드 조회 - 성공")
     @Test
     void findPullRequestsByNickname_SuccessToFind() {
-        Mockito.when(pullRequestService.findPullRequestsByNickname(anyString()))
+        Mockito.when(pullRequestService.findPullRequestsByNickname(any()))
             .thenReturn(PULL_REQUEST_RESPONSES);
 
         List<PullRequestResponse> pullRequestResponses = pullRequestService
-            .findPullRequestsByNickname(TEST_NICKNAME);
+            .findPullRequestsByNickname(new PullRequestRequest(TEST_NICKNAME));
 
         assertThat(pullRequestResponses).hasSize(2);
     }

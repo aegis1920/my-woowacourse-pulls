@@ -1,7 +1,8 @@
 package com.bingbong.mywoowacoursepulls.controller;
 
+import com.bingbong.mywoowacoursepulls.dto.PullRequestRequest;
 import com.bingbong.mywoowacoursepulls.dto.PullRequestResponse;
-import java.util.Arrays;
+import com.bingbong.mywoowacoursepulls.service.PullRequestService;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,16 +15,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/api/pull-requests")
 public class PullRequestController {
 
+    private final PullRequestService pullRequestService;
+
+    public PullRequestController(PullRequestService pullRequestService) {
+        this.pullRequestService = pullRequestService;
+    }
+
     @GetMapping
     public ResponseEntity<List<PullRequestResponse>> findPullRequests(
-        @RequestBody String nickname) {
-        List<PullRequestResponse> pullRequestResponses = Arrays.asList(
-            new PullRequestResponse(),
-            new PullRequestResponse(),
-            new PullRequestResponse()
-        );
+        @RequestBody PullRequestRequest pullRequestRequest) {
+        List<PullRequestResponse> pullRequests = pullRequestService
+            .findPullRequestsByNickname(pullRequestRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
-            .body(pullRequestResponses);
+            .body(pullRequests);
     }
 }

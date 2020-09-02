@@ -9,6 +9,7 @@ import java.util.List;
 public class TestFixture {
 
     public static final String TEST_NICKNAME = "빙봉";
+    public static final String TEST_NOT_FOUND_NICKNAME = "없는 닉네임";
     public static final String TEST_REPO_NAME = "woowa-writing-2";
     public static final String TEST_REPO_URL = "https://github.com/woowacourse/woowa-writing-2";
     public static final String TEST_ORG_NAME = "woowacourse";
