@@ -26,11 +26,11 @@ public class PageParser {
             if (isAccessibleIndex(linkSegment)) {
                 continue;
             }
-            if (validateRel(linkSegment[1])) {
+            if (isRelValue(linkSegment[1])) {
                 continue;
             }
             String htmlUrl = linkSegment[0].trim();
-            if (validateHtmlUrl(htmlUrl)) {
+            if (isHtmlUrl(htmlUrl)) {
                 continue;
             }
 
@@ -63,11 +63,11 @@ public class PageParser {
         return -1;
     }
 
-    private static boolean validateHtmlUrl(String htmlUrl) {
+    private static boolean isHtmlUrl(String htmlUrl) {
         return !htmlUrl.startsWith("<") || !htmlUrl.endsWith(">");
     }
 
-    private static boolean validateRel(String rel) {
+    private static boolean isRelValue(String rel) {
         String[] relSegment = rel.trim()
             .split(KEY_VALUE_DELIMITER);
 

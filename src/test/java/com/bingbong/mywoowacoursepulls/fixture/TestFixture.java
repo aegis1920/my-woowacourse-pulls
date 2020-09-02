@@ -20,8 +20,8 @@ public class TestFixture {
     public static final String TEST_PULL_REQUEST_CREATED_AT = "2020-09-01T00:00:00Z";
     public static final String TEST_PULL_REQUEST_UPDATED_AT = "2020-09-01T00:00:00Z";
 
-    public static final String REAL_REPOSITORY_URL = "https://api.github.com/orgs/woowacourse/repos";
-    public static final String REAL_PULL_REQUEST_URL = "https://api.github.com/repos/woowacourse/woowa-writing-2/pulls?state=all";
+    public static final String REAL_REPOSITORY_URL = "https://api.github.com/orgs/woowacourse/repos?per_page=100&page=1";
+    public static final String REAL_PULL_REQUEST_URL = "https://api.github.com/repos/woowacourse/woowa-writing-2/pulls?state=all&per_page=100&page=1";
 
     public static final List<PullRequestResponse> PULL_REQUEST_RESPONSES = Arrays.asList(
         PullRequestResponse.of(
@@ -34,10 +34,14 @@ public class TestFixture {
         )
     );
 
-    public static final List<GithubRepositoryResponse> GITHUB_REPOSITORY_RESPONSES = Arrays.asList(
-        GithubRepositoryResponse.of(1L, TEST_REPO_NAME, TEST_REPO_URL),
-        GithubRepositoryResponse.of(2L, TEST_REPO_NAME, TEST_REPO_URL)
-    );
+    public static final List<GithubRepositoryResponse> EXPECT_GITHUB_REPOSITORY_RESPONSES = Arrays
+        .asList(
+            GithubRepositoryResponse.of(1L, TEST_REPO_NAME, TEST_REPO_URL),
+            GithubRepositoryResponse.of(2L, TEST_REPO_NAME, TEST_REPO_URL)
+        );
+
+    public static final List<String> PAGE_LINK_OVER_SIZE = Arrays
+        .asList(TEST_NICKNAME, TEST_NICKNAME);
 
     public static final List<ExpectGithubPullRequestResponse> EXPECT_GITHUB_PULL_REQUEST_RESPONSES = Arrays
         .asList(

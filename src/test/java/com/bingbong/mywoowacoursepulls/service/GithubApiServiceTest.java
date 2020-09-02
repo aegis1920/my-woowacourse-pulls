@@ -1,7 +1,8 @@
 package com.bingbong.mywoowacoursepulls.service;
 
 import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.EXPECT_GITHUB_PULL_REQUEST_RESPONSES;
-import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.GITHUB_REPOSITORY_RESPONSES;
+import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.EXPECT_GITHUB_REPOSITORY_RESPONSES;
+import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.PAGE_LINK_OVER_SIZE;
 import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.REAL_PULL_REQUEST_URL;
 import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.REAL_REPOSITORY_URL;
 import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.TEST_ORG_NAME;
@@ -12,12 +13,14 @@ import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.TEST_PULL_REQU
 import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.TEST_REPO_NAME;
 import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.TEST_REPO_URL;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 
 import com.bingbong.mywoowacoursepulls.dto.GithubPullRequestResponse;
 import com.bingbong.mywoowacoursepulls.dto.GithubRepositoryResponse;
+import com.bingbong.mywoowacoursepulls.exception.InvalidPageLinkSizeException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
@@ -25,6 +28,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -50,7 +54,7 @@ public class GithubApiServiceTest {
             .andExpect(method(HttpMethod.GET))
             .andRespond(withStatus(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(mapper.writeValueAsString(GITHUB_REPOSITORY_RESPONSES))
+                .body(mapper.writeValueAsString(EXPECT_GITHUB_REPOSITORY_RESPONSES))
             );
 
         // when
@@ -96,5 +100,40 @@ public class GithubApiServiceTest {
         assertThat(response.getState()).isEqualTo(TEST_PULL_REQUEST_STATE);
         assertThat(response.getCreatedAt()).isNotNull();
         assertThat(response.getUpdatedAt()).isNotNull();
+    }
+
+    @DisplayName("orgName에 해당하는 모든 Repository 조회 - 실패, PageLink 예외 발생")
+    @Test
+    void getAllRepositories_OverPageLinkSize_ThrownException() throws JsonProcessingException {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.addAll("Link", PAGE_LINK_OVER_SIZE);
+        mockRestServiceServer.expect(requestTo(REAL_REPOSITORY_URL))
+            .andExpect(method(HttpMethod.GET))
+            .andRespond(withStatus(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(mapper.writeValueAsString(EXPECT_GITHUB_REPOSITORY_RESPONSES))
+                .headers(httpHeaders)
+            );
+
+        assertThatThrownBy(() -> githubApiService.getAllRepositories(TEST_ORG_NAME))
+            .isInstanceOf(InvalidPageLinkSizeException.class);
+    }
+
+    @DisplayName("repoName에 해당하는 모든 PullRequest 조회 - 실패, PageLink 예외 발생")
+    @Test
+    void getAllPullRequests_OverPageLinkSize_ThrownException() throws JsonProcessingException {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.addAll("Link", PAGE_LINK_OVER_SIZE);
+        mockRestServiceServer.expect(requestTo(REAL_PULL_REQUEST_URL))
+            .andExpect(method(HttpMethod.GET))
+            .andRespond(withStatus(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(mapper.writeValueAsString(EXPECT_GITHUB_PULL_REQUEST_RESPONSES))
+                .headers(httpHeaders)
+            );
+
+        assertThatThrownBy(() -> githubApiService
+            .getAllPullRequests(TEST_REPO_NAME, TEST_PULL_REQUEST_DEFAULT_STATE))
+            .isInstanceOf(InvalidPageLinkSizeException.class);
     }
 }
