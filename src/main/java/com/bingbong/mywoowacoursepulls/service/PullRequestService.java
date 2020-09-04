@@ -10,10 +10,12 @@ import com.bingbong.mywoowacoursepulls.dto.PullRequestResponseAssembler;
 import com.bingbong.mywoowacoursepulls.repository.PullRequestRepository;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@PropertySource("classpath:config/application-prod.properties")
 public class PullRequestService {
 
     public static final String DEFAULT_ORG_NAME = "woowacourse";
@@ -47,6 +49,7 @@ public class PullRequestService {
         List<PullRequest> pullRequests = PullRequestAssembler
             .listAssemble(githubPullRequestResponses);
 
+        pullRequestRepository.deleteAll();
         List<PullRequest> savedPullRequests = pullRequestRepository.saveAll(pullRequests);
         return PullRequestResponseAssembler.listAssemble(savedPullRequests);
     }
