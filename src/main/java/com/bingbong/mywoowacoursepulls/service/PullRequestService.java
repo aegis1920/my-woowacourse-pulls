@@ -11,6 +11,7 @@ import com.bingbong.mywoowacoursepulls.repository.PullRequestRepository;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,7 @@ public class PullRequestService {
     }
 
     @Transactional
+    @Scheduled(cron = "0 0 18 * * *") // 매일 오후 18시 실행 (하루 한 번)
     public List<PullRequestResponse> savePullRequests() {
         List<GithubRepositoryResponse> githubRepositoryResponses = githubApiService
             .getAllRepositories(DEFAULT_ORG_NAME);
