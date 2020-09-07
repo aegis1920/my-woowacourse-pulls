@@ -12,6 +12,8 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.PropertySource;
@@ -28,6 +30,8 @@ import org.springframework.web.client.RestTemplate;
 @PropertySource("classpath:config/application-prod.properties")
 public class GithubApiService {
 
+    private static final Logger log = LoggerFactory.getLogger(GithubApiService.class);
+
     private static final int DEFAULT_PAGE_COUNT = 1;
     private static final int DEFAULT_LAST_PAGE_COUNT = Integer.MAX_VALUE;
     private static final int INVALID_PAGE_COUNT = -1;
@@ -39,8 +43,8 @@ public class GithubApiService {
 
     public GithubApiService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder
-            .setConnectTimeout(Duration.ofMillis(50000))
-            .setReadTimeout(Duration.ofMillis(50000))
+            .setConnectTimeout(Duration.ofMillis(100000))
+            .setReadTimeout(Duration.ofMillis(100000))
             .build();
     }
 
@@ -54,6 +58,8 @@ public class GithubApiService {
     }
 
     public List<GithubPullRequestResponse> getAllPullRequests(String repoName, String state) {
+        log.info("repoName : " + repoName + "'s all pullRequests api called");
+
         HttpEntity<String> httpEntity = getHttpEntityWithHeaders();
 
         return getAllResponses((pageCount) -> restTemplate
