@@ -5,7 +5,6 @@ import static com.bingbong.mywoowacoursepulls.fixture.TestFixture.TEST_NICKNAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 
-import com.bingbong.mywoowacoursepulls.dto.PullRequestRequest;
 import com.bingbong.mywoowacoursepulls.dto.PullRequestResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +27,7 @@ public class PullRequestServiceTest {
             .thenReturn(PULL_REQUEST_RESPONSES);
 
         List<PullRequestResponse> pullRequestResponses = pullRequestService
-            .findPullRequestsByNickname(new PullRequestRequest(TEST_NICKNAME));
+            .findPullRequestsByNickname(TEST_NICKNAME);
 
         assertThat(pullRequestResponses).hasSize(2);
     }

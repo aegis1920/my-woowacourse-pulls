@@ -4,7 +4,6 @@ import com.bingbong.mywoowacoursepulls.domain.PullRequest;
 import com.bingbong.mywoowacoursepulls.dto.GithubPullRequestResponse;
 import com.bingbong.mywoowacoursepulls.dto.GithubRepositoryResponse;
 import com.bingbong.mywoowacoursepulls.dto.PullRequestAssembler;
-import com.bingbong.mywoowacoursepulls.dto.PullRequestRequest;
 import com.bingbong.mywoowacoursepulls.dto.PullRequestResponse;
 import com.bingbong.mywoowacoursepulls.dto.PullRequestResponseAssembler;
 import com.bingbong.mywoowacoursepulls.repository.PullRequestRepository;
@@ -32,10 +31,8 @@ public class PullRequestService {
     }
 
     @Transactional(readOnly = true)
-    public List<PullRequestResponse> findPullRequestsByNickname(
-        PullRequestRequest pullRequestRequest) {
-        List<PullRequest> pullRequests = pullRequestRepository
-            .findAllByTitleContaining(pullRequestRequest.getNickname());
+    public List<PullRequestResponse> findPullRequestsByNickname(String nickname) {
+        List<PullRequest> pullRequests = pullRequestRepository.findAllByTitleContaining(nickname);
         return PullRequestResponseAssembler.listAssemble(pullRequests);
     }
 

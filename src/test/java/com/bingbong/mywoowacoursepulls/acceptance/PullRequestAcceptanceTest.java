@@ -9,7 +9,6 @@ import com.bingbong.mywoowacoursepulls.dto.PullRequestResponse;
 import com.bingbong.mywoowacoursepulls.service.PullRequestService;
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
-import java.util.HashMap;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -75,15 +74,10 @@ public class PullRequestAcceptanceTest {
     }
 
     private List<PullRequestResponse> findPullRequestsByNickname(String nickname) {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("nickname", nickname);
-
         return given()
             .accept(MediaType.APPLICATION_JSON_VALUE)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .body(params)
             .when()
-            .get("/api/pull-requests")
+            .get("/api/pull-requests?nickname=" + nickname)
             .then()
             .log().all()
             .statusCode(HttpStatus.OK.value())
