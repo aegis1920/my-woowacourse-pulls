@@ -58,7 +58,7 @@ public class GithubApiService {
     }
 
     public List<GithubPullRequestResponse> getAllPullRequests(String repoName, String state) {
-        log.info("repoName : " + repoName + "'s all pullRequests api called");
+        log.info("repoName : {}'s all pullRequests api called", repoName);
 
         HttpEntity<String> httpEntity = getHttpEntityWithHeaders();
 
