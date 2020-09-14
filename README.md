@@ -25,9 +25,18 @@ https://chrome.google.com/webstore/detail/mywoowacoursepulls/dkeblehcoebopgclhhj
 
 ### TodoList
 
-1. EC2 한국 시간으로 변경
-2. 젠킨스 적용
-3. validation(프론트 검색 시 요청 횟수 제한 등...)
+1. 젠킨스 적용
+2. validation(프론트 검색 시 요청 횟수 제한 등...)
+
+### 기능 구현 목록
+
+1. 해당 orgName의 Repository를 조회하는 기능
+2. 해당 Repository의 Pull Request를 조회하는 기능
+3. database 정보 git submodule에 저장
+4. 닉네임으로 모든 Pull Request를 조회하는 기능
+5. 모든 Repository, 모든 PullRequest를 가져올 수 있도록 Github Page 파싱 기능
+6. 주기적으로 가져올 수 있도록 하는 스케줄러 기능
+7. AWS EC2 한국 시간 적용
 
 ### 참고 내용
 
