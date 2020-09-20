@@ -5,6 +5,8 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+logs
+
 ### STS ###
 .apt_generated
 .classpath
@@ -32,3 +34,5 @@ out/
 
 ### VS Code ###
 .vscode/
+
+.DS_Store
